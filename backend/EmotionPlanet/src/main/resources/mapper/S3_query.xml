@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.S3Dao">
+
+    <insert id="flushFile" parameterType="com.ssafy.project.EmotionPlanet.Dto.S3Dto">
+        insert into img(imgLink, imgName) values (  #{imgLink}, #{imgName})
+        <selectKey keyProperty="no" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <delete id="delete" parameterType="string">
+        delete from img where imgName = #{imgName}
+    </delete>
+
+    <delete id="deleteByNo" parameterType="int">
+        delete from img where no = #{no}
+    </delete>
+
+    <select id="select" parameterType="string">
+        select no
+        from img
+        where imgName = #{imgName}
+    </select>
+
+    <select id="selectByLink" parameterType="string" resultType="com.ssafy.project.EmotionPlanet.Dto.S3Dto">
+        select no, imgLink, imgName
+        from img
+        where imgLink = #{imgLink}
+    </select>
+    
+    <update id="updateimg">
+		update user
+		set profile_img = #{imgLink}
+		where no = #{no}
+	</update> 
+</mapper>

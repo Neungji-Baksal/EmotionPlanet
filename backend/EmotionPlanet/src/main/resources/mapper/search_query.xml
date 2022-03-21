@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.SearchDao">
+
+	<select id="tagSelect" parameterType="String"
+		resultType="com.ssafy.project.EmotionPlanet.Dto.TagDto">
+		select t.name , (select count(*) from feed_tag ft, feed f where ft.tagNo = t.no and ft.feedNo = f.no and f.date between date_add(now(),interval -1 MONTH) and now()) as 'count'
+		from tag t
+		where name like CONCAT(#{name},'%');
+	</select>
+
+	<select id="tagListSelect" parameterType="String"
+		resultType="int">
+		select ft.feedNo, (select count(*) from feed_like where feed_like.feedNo = ft.feedNo) as 'count'
+		from feed_tag ft, tag t, feed f
+		where ft.tagNo = t.no and t.name = #{name} and f.no = ft.feedNo and f.date between date_add(now(),interval -1 MONTH) and now()
+		order by
+		count desc;
+	</select>
+	
+	<select id="feedSelect" parameterType="String"
+			resultType="com.ssafy.project.EmotionPlanet.Dto.FeedDto">
+		select f.no f.descr f.author f.date
+		from feed f, feed_tag ft
+		where f.no = ft.feedNo and ft.tagNo in (
+												 	select t.no
+													from tag t
+													where t.name = #{name}
+							          			)
+	</select>
+
+	
+	<select id="userSelect" parameterType="String"
+		resultType="com.ssafy.project.EmotionPlanet.Dto.UserDto">
+		select no, nickname, profile_img as profileImg
+		from user
+		where nickname like
+		CONCAT(#{name},'%');
+	</select>
+
+	<select id="picktagSelect"
+		resultType="com.ssafy.project.EmotionPlanet.Dto.TagDto">
+		select t.no, t.name, count(*) as count
+		from tag t, pick p
+		where t.no = p.tagNo and t.name is not null
+		group by t.name
+		order by count desc;
+	</select>
+
+	<select id="pickSelect" parameterType="String"
+			resultType="hashmap">
+	select p.no, p.userNo, p.name, p.date, t.name as tagname, t.no as tagno , p.type, p.imgLink, (select count(*) from pick_like where pickNo = p.no) as count
+	from tag t, pick p
+	where t.no = p.tagNo and t.name = #{name} and p.date between date_add(now(),interval -1 MONTH) and now()
+    group by p.no
+    order by count desc;
+	</select>
+	
+</mapper>
+
+<!--<select id="recommendSelect" parameterType="String"-->
+<!--		resultType="com.ssafy.project.EmotionPlanet.Dto.PickDto">-->
+<!--select p.no, p.userNo, u.nickname, p.name, p.date, p.tagNo, (select count(*) from picklike where picklike.pickNo = p.no) as 'count'-->
+<!--from pick p, tag t, user u-->
+<!--where u.no = p.userNo and p.tagNo = t.no and p.date between date_add(now(),interval -1 MONTH) and now() and p.tagNo = (select no from tag where name = #{name})-->
+<!--order by count desc;-->
+<!--</select>-->
+
+<!--<select id="pickcontentSelect" parameterType="int"-->
+<!--		resultType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">-->
+<!--select *-->
+<!--from pickcontent-->
+<!--where pickNo = #{no};-->
+<!--</select>-->

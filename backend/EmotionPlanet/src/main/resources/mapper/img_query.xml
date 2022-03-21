@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.ImgDao">
+
+    <select id="list" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.ImgDto">
+        select i.no, i.imgLink, i.imgName
+        from img i
+        where i.no in (
+                        select fi.imgNo
+                        from feed_img fi
+                        where fi.feedNo = #{feedNo}
+                     )
+    </select>
+
+    <select id="select" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.ImgDto">
+        select i.no, i.imgLink, i.imgName
+        from img i
+        where i.no = #{no}
+    </select>
+
+    <insert id="relation" parameterType="map">
+        insert into feed_img(feedNo, imgNo) values (  #{feedNo}, #{imgNo})
+    </insert>
+
+    <delete id="relationDelete" parameterType="map">
+        delete from feed_img where feedNo = #{feedNo} and imgNo = #{imgNo}
+    </delete>
+</mapper>

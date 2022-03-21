@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.CommentDao">
+
+    <select id="list" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.CommentDto">
+        select co.no, co.descr, co.author, co.date
+        from comment co, feed_comment fc
+        where co.no = fc.commentNo and fc.feedNo = #{feedNo}
+        order by date desc
+    </select>
+
+    <select id="read" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.CommentDto">
+        select co.no, co.descr, co.author, co.date, fc.feedNo
+        from comment co, feed_comment fc
+        where co.no = #{no} and fc.commentNo = #{no}
+    </select>
+
+    <insert id="write" parameterType="com.ssafy.project.EmotionPlanet.Dto.CommentDto">
+        insert into comment(descr, author) values (  #{descr}, #{author})
+        <selectKey keyProperty="no" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <insert id="relation" parameterType="map">
+        insert into feed_comment(feedNo, commentNo) values (  #{feedNo}, #{commentNo})
+    </insert>
+
+    <update id="update" parameterType="com.ssafy.project.EmotionPlanet.Dto.CommentDto">
+        update comment
+        set descr = #{descr}
+        author = #{author}
+        date = #{date}
+        where no = #{no}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        delete from comment where no = #{no}
+    </delete>
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.UserDao">
+
+	<insert id="userRegister"
+		parameterType="com.ssafy.project.EmotionPlanet.Dto.UserDto">
+		insert into user(email, pw, nickname, birth, tel)
+		values (#{email}, #{pw}, #{nickname}, #{birth}, #{tel})
+	</insert>
+	
+	
+	<select id="userSelect" parameterType="int"
+		resultType="com.ssafy.project.EmotionPlanet.Dto.UserDto">
+		select no, email, pw ,nickname, tel, birth, profile_img as
+		profileImg, mood, publish, intro
+		from user
+		where no = #{no}
+	</select>
+
+	<select id="userSelectByEmail" parameterType="string"
+			resultType="com.ssafy.project.EmotionPlanet.Dto.UserDto">
+		select no, email, pw ,nickname, tel, birth, profile_img as
+		profileImg, mood, publish, intro
+		from user
+		where email = #{email}
+	</select>
+	
+	<select id="findPw" parameterType="String"
+		resultType="com.ssafy.project.EmotionPlanet.Dto.UserDto">
+		select no, email, pw ,nickname, tel, birth, profile_img as
+		profileImg, mood, publish, intro
+		from user
+		where email = #{email} and tel = #{tel}
+	</select>
+	
+	<select id="findEamil" parameterType="String"
+		resultType="String">
+		select email
+		from user
+		where tel = #{tel}
+	</select>
+
+	<select id="duplicateEmail" parameterType="String"
+		resultType="int">
+		select count(*)
+		from user
+		where email = #{email}
+	</select>
+
+	<select id="duplicateNickname" parameterType="String"
+		resultType="int">
+		select count(*)
+		from user
+		where nickname = #{nickname}
+	</select>
+	
+	<select id="duplicateTel" parameterType="String"
+		resultType="int">
+		select count(*)
+		from user
+		where tel = #{tel}
+	</select>
+
+	<delete id="userDelete" parameterType="int">
+		delete from user where
+		no = #{no};
+	</delete>
+
+	<update id="userUpdate"
+		parameterType="com.ssafy.project.EmotionPlanet.Dto.UserDto">
+		update user
+		set pw = #{pw}, nickname = #{nickname} , mood
+		= #{mood} , publish = #{publish} , tel = #{tel}, intro = #{intro}, birth = #{birth}
+		where no = #{no}
+	</update>
+
+	<update id="userRefreshToken"
+			parameterType="com.ssafy.project.EmotionPlanet.Dto.UserDto">
+		UPDATE user
+		SET refreshToken = #{refreshToken}
+		WHERE email = #{email};
+	</update>
+
+	<select id="selectRefreshToken" parameterType="String"
+			resultType="String">
+		select refreshToken
+		from user
+		where email = #{email}
+	</select>
+</mapper>

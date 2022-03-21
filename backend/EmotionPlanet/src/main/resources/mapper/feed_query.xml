@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.FeedDao">
+
+    <select id="list" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.FeedDto">
+        select f.no, f.descr, f.author, f.date
+        from feed f
+        where f.author in (
+                            select fo.receiver
+                            from follow fo
+                            where fo.sender = #{no}
+                           ) and f.date between date_add(now(),interval -1 week ) and now()
+        order by date desc;
+    </select>
+
+    <select id="myList" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.FeedDto">
+        select f.no, f.descr, f.author, f.date
+        from feed f
+        where f.author = #{no}
+        order by date desc
+    </select>
+
+    <select id="read" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.FeedDto">
+        select f.no, f.descr, f.author, f.date
+        from feed f
+        where f.no = #{no}
+    </select>
+
+    <insert id="write" parameterType="com.ssafy.project.EmotionPlanet.Dto.FeedDto">
+        insert into feed(descr, author)
+        values (  #{descr}, #{author})
+        <selectKey keyProperty="no" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="com.ssafy.project.EmotionPlanet.Dto.FeedDto">
+        update feed
+            set descr = #{descr}
+        where no = #{no}
+    </update>
+    
+    <delete id="delete" parameterType="int">
+        delete from feed where no = #{no}
+    </delete>
+
+    <insert id="connect" parameterType="map">
+        insert into feed_img(feedNo, imgNo)
+        values (  #{feedNo}, #{imgNo} )
+    </insert>
+
+    <insert id="like" parameterType="map">
+        insert into feed_like(feedNo, userNo)
+        values (  #{feedNo}, #{userNo} )
+    </insert>
+
+    <select id="liking" parameterType="map" resultType="int">
+        select count(*)
+        from feed_like
+        where feedNo = #{feedNo} and userNo = #{userNo}
+    </select>
+
+    <delete id="unlike" parameterType="map">
+        delete from feed_like where feedNo = #{feedNo} and userNo = #{userNo}
+    </delete>
+
+    <select id="likeListFollow" parameterType="map" resultType="com.ssafy.project.EmotionPlanet.Dto.UserRequestDto">
+        select u.no, u.nickname, u.profile_img
+        from user u, feed_like fl, follow f
+        where fl.feedNo = #{feedNo} and u.no = fl.userNo and f.sender = fl.userNo and f.receiver = #{userNo}
+    </select>
+
+    <select id="likeListUnFollow" parameterType="map" resultType="com.ssafy.project.EmotionPlanet.Dto.UserRequestDto">
+        select u.no, u.nickname, u.profile_img
+        from user u join feed_like fl
+        on fl.feedNo = #{feedNo} and u.no = fl.userNo and u.no not in (
+                                                                    select u.no
+                                                                    from user u, feed_like fl, follow f
+                                                                    where fl.feedNo = #{feedNo} and u.no = fl.userNo and f.sender = fl.userNo and f.receiver = #{userNo}
+                                                                 )
+    </select>
+
+
+</mapper>

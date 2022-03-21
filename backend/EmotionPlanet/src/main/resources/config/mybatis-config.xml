@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <settings>
+        <setting name="callSettersOnNulls" value="true"/> <!-- 값이 null이라도 스킵하지말고 값을 저장해라 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <mappers>
+        <mapper resource="mapper/login_query.xml" />
+        <mapper resource="mapper/user_query.xml" />
+
+        <mapper resource="mapper/follow_query.xml" />
+        <mapper resource="mapper/search_query.xml" />
+        <mapper resource="mapper/test_query.xml" />
+        <mapper resource="mapper/api_query.xml" />
+        <mapper resource="mapper/alarm_query.xml" />
+
+        <mapper resource="mapper/feed_query.xml" />
+        <mapper resource="mapper/comment_query.xml" />
+        <mapper resource="mapper/S3_query.xml" />
+        <mapper resource="mapper/tag_query.xml" />
+        <mapper resource="mapper/img_query.xml" />
+        <mapper resource="mapper/pick_query.xml" />
+        <mapper resource="mapper/pickContent_query.xml" />
+
+    </mappers>
+
+</configuration>

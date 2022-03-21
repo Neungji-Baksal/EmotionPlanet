@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.PickContentDao">
+
+    <select id="listOnMusic" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        select no, pickNo, apiId, author, title, descr, year, imgLink
+        from music
+        where pickNo = #{pickNo}
+    </select>
+
+    <select id="listOnMovie" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        select m.no, m.title, m.descr, m.year, m.imgLink, m.genre
+        from movie m
+        where m.no in (
+                        select pm.movieNo
+                        from pick_movie pm
+                        where pm.pickNo = #{pickNo}
+                       )
+    </select>
+
+    <select id="listOnActivity" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        select ac.no, ac.title, ac.imgLink, ac.type
+        from activity ac
+        where ac.no in (
+                        select pa.activityNo
+                        from pick_activity pa
+                        where pa.pickNo = #{pickNo}
+                       )
+    </select>
+
+    <select id="selectOnMusic" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        select no, pickNo, apiId, author, title, descr, year, imgLink
+        from music
+        where no = #{no}
+    </select>
+
+    <select id="selectOnMovie" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        select m.no, m.title, m.descr, m.year, m.imgLink, m.genre
+        from movie m, pick_movie pm
+        where m.no = #{no} and pm.movieNo = #{no}
+    </select>
+
+    <select id="selectOnActivity" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        select ac.no, ac.title, ac.imgLink, ac.type
+        from activity ac, pick_activity pa
+        where no = #{no} and pa.activityNo = #{no}
+    </select>
+
+    <insert id="createOnMusic" parameterType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        insert into music(pickNo, apiId, author, title, descr, year, imgLink)
+        values (  #{pickNo}, #{apiId}, #{author}, #{title}, #{descr}, #{year}, #{imgLink} )
+        <selectKey keyProperty="no" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="createOnMovie" parameterType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        insert into pick_movie(pickNo, movieNo)
+        values ( #{pickNo}, #{targetNo} )
+    </insert>
+
+    <insert id="createOnActivity" parameterType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">
+        insert into pick_activity(pickNo, activityNo)
+        values ( #{pickNo}, #{targetNo} )
+    </insert>
+
+<!--    <insert id="createOnMovie" parameterType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">-->
+<!--        insert into movie(title, descr, year, imgLink, genre)-->
+<!--        values ( #{title}, #{descr}, #{year}, #{imgLink}, #{genre} )-->
+<!--        <selectKey keyProperty="no" resultType="int" order="AFTER">-->
+<!--            SELECT LAST_INSERT_ID()-->
+<!--        </selectKey>-->
+<!--    </insert>-->
+
+<!--    <insert id="createOnActivity" parameterType="com.ssafy.project.EmotionPlanet.Dto.PickContentDto">-->
+<!--        insert into activity(title, imgLink, type)-->
+<!--        values ( #{title}, #{imgLink}, #{type} )-->
+<!--        <selectKey keyProperty="no" resultType="int" order="AFTER">-->
+<!--            SELECT LAST_INSERT_ID()-->
+<!--        </selectKey>-->
+<!--    </insert>-->
+
+    <delete id="deleteOnMusic" parameterType="int">
+        delete from music where no = #{no}
+    </delete>
+
+    <delete id="deleteOnMovie" parameterType="int">
+        delete from pick_movie where movieNo = #{no}
+    </delete>
+
+    <delete id="deleteOnActivity" parameterType="int">
+        delete from pick_activity where activityNo = #{no}
+    </delete>
+
+</mapper>

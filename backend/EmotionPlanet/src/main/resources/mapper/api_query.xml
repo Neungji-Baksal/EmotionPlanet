@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.ApiDao">
+
+	<insert id="MovieInsert" parameterType="java.util.List">
+		INSERT IGNORE INTO movie(no, title, descr, year, imgLink, genre)
+		VALUES 
+		<foreach item="item" separator=" , " collection="list">
+			(
+			#{item.no}, #{item.title}, #{item.descr}, #{item.year},#{item.imgLink}, #{item.genre}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="MovieSelect" parameterType="String" resultType="com.ssafy.project.EmotionPlanet.Dto.MovieDto">
+        select no, title, descr, year, imgLink, genre
+        from movie
+        where genre like CONCAT('%',#{genre},'%')
+        ORDER BY RAND() LIMIT 10;
+    </select>
+    
+    <select id="MovieSelectnomal" parameterType="String" resultType="com.ssafy.project.EmotionPlanet.Dto.MovieDto">
+        select no, title, descr, year, imgLink, genre
+        from movie
+        where genre like CONCAT('%',#{genre},'%') and year between date_add(now(),interval -1 MONTH) and now()
+        ORDER BY RAND() LIMIT 10;
+    </select>
+	
+	<select id="ActivitySelect" parameterType="INT" resultType="com.ssafy.project.EmotionPlanet.Dto.ActivityDto">
+        select no, title, imgLink, type
+        from activity
+        where type = #{type}
+        ORDER BY RAND() LIMIT 10;
+    </select>
+</mapper>

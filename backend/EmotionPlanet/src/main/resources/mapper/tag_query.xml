@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.TagDao">
+
+    <select id="list" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.TagDto">
+        select t.no, t.name, t.type
+        from tag t, feed_tag ft
+        where t.no = ft.tagNo and ft.feedNo = #{feedNo}
+    </select>
+
+    <select id="select" parameterType="int" resultType="com.ssafy.project.EmotionPlanet.Dto.TagDto">
+        select t.no, t.name, t.type
+        from tag t
+        where t.no = #{no}
+    </select>
+
+    <select id="duplicateTag" parameterType="String"
+            resultType="com.ssafy.project.EmotionPlanet.Dto.TagDto">
+        select *
+        from tag
+        where name = #{name}
+    </select>
+
+    <insert id="create" parameterType="com.ssafy.project.EmotionPlanet.Dto.TagDto">
+        insert into tag(name, type) values (  #{name}, #{type})
+        <selectKey keyProperty="no" resultType="int" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="relation" parameterType="map">
+        replace into feed_tag(feedNo, tagNo) values (#{feedNo}, #{tagNo})
+    </insert>
+
+    <delete id="deleteRelation" parameterType="map">
+        delete from feed_tag where feedNo = #{feedNo} and tagNo = #{tagNo}
+    </delete>
+</mapper>

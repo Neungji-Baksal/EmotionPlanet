@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.project.EmotionPlanet.Dao.AlarmDao">
+
+	<insert id="insertAlram"
+		parameterType="com.ssafy.project.EmotionPlanet.Dto.AlarmDto">
+		REPLACE into alarm(sender, receiver, feedno,
+		commentno, pickno, date, type, readcheck)
+		values
+		(#{sender},#{receiver},#{feedno},#{commentno},
+		#{pickno}, #{date} ,#{type}, 0)
+		<selectKey keyProperty="no" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<delete id="deleteAlram" parameterType="int">
+		delete from alarm where
+		no = #{no}
+	</delete>
+
+	<select id="selectAlram" parameterType="int"
+		resultType="com.ssafy.project.EmotionPlanet.Dto.AlarmDto">
+		select a.no, a.sender,  u.nickname as 'senderNickname', u.profile_img as 'senderImg', a.receiver,
+		a.feedno, a.commentno, a.pickno ,a.date, a.type, a.readcheck 
+		from alarm a, user u
+		where a.receiver = #{receiver} and u.no = a.sender 
+        order by date desc;
+	</select>
+
+	<update id="updatereadAlram" parameterType="int">
+		update alarm
+		set readcheck
+		= 1
+		where receiver = #{receiver};
+	</update>
+
+	<delete id="deleteAlramWeek" parameterType="int">
+		delete from alarm
+		where
+		receiver = #{receiver} and date <![CDATA[<]]> DATE_SUB(NOW(), INTERVAL 7 DAY) and readcheck = 1
+	</delete>
+</mapper>
