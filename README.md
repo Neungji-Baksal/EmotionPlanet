@@ -713,13 +713,9 @@ DockerFile을 배포하였습니다. 그러면 NGINX가 80포트로 들어오는
   
   ​			1-1 일반 로그인은 DB값을 비교하여 로그인 정보가 일치하면 Refresh토큰을 DB에 저장하고 Access토큰과 Refresh토큰을 반환합니다.
   
-  ​			1-2 소셜 로그인을 하면 각각의 API가 토큰을 반환하고 그 토큰을 검증 후 구글과 카카오가 제공해준 사용자 정보를 Payload에 제공 받습니다.
+  ​			1-2 소셜 로그인을 하면 각각의 API가 토큰을 반환하고 그 토큰을 검증 후 구글과 카카오가 제공해준 사용자 정보를 Payload에 제공 받습니다. 디코딩을 통해 데이터를 정제하고 인증이 완료되면 마찬가지로 Access토큰과 Refresh토큰을 반환합니다.
   
-  ​			디코딩을 통해 데이터를 정제하고 인증이 완료되면 마찬가지로 Access토큰과 Refresh토큰을 반환합니다.
-  
-  ​			2 로그인한 사용자가 서비스를 요청하면 인터셉터가 토큰을 검증한 뒤 유효한 값이면 통과시켜 데이터를 반환해 줄때 Access토큰 값을 갱신시켜
-  
-  ​			반환해줍니다.
+  ​			2 로그인한 사용자가 서비스를 요청하면 인터셉터가 토큰을 검증한 뒤 유효한 값이면 통과시켜 데이터를 반환해 줄때 Access토큰 값을 갱신시켜 반환해줍니다.
 
 ​		
 
@@ -727,13 +723,13 @@ DockerFile을 배포하였습니다. 그러면 NGINX가 80포트로 들어오는
 
 ## 함께한 사람
 
-| 조은누리 | 팀장, 프론트 담당 |      | https://github.com/eunnuricho     |
-| -------- | ----------------- | ---- | --------------------------------- |
-| 임경훈   | 프론트엔드 개발   |      | https://github.com/KyounghoonLim  |
-| 전호정   | 프론트엔드 개발   |      | https://github.com/hojeong33      |
-| 정순일   | 백엔드 개발       |      | https://github.com/JUNGSOONIL     |
-| 최명재   | 프론트엔드 개발   |      | https://github.com/HKLM93         |
-| 최상후   | 백엔드 개발       |      | https://github.com/Neungji-Baksal |
+| 조은누리 | 팀장, 프론트 엔드 개발 |      | https://github.com/eunnuricho     |
+| -------- | ---------------------- | ---- | --------------------------------- |
+| 임경훈   | 프론트엔드 개발        |      | https://github.com/KyounghoonLim  |
+| 전호정   | 프론트엔드 개발        |      | https://github.com/hojeong33      |
+| 정순일   | 백엔드 개발            |      | https://github.com/JUNGSOONIL     |
+| 최명재   | 프론트엔드 개발        |      | https://github.com/HKLM93         |
+| 최상후   | 백엔드 개발            |      | https://github.com/Neungji-Baksal |
 
 
 
