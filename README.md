@@ -2,13 +2,13 @@
 
 ## 프로젝트 개요
 
-현대 사회인들이 자신의 감정을 표출하기 어려워하고 
+현대 사회인들이 자신의 감정을 표출하기 어려워하고 코로나의 장기화로 인해 
+
+코로나 블루 현상이 발생하기 시작했습니다.
 
 그래서 저희는 감정을 표현하고 공유하는 공간이 있으면 좋겠다고 생각하여
 
 이모션 플래닛을 제작하게 되었습니다.
-
-
 
 **저는 여기서 백엔드 서비스 개발과 배포를 맡았습니다.**
 
@@ -504,7 +504,7 @@ DockerFile을 배포하였습니다. 그러면 NGINX가 80포트로 들어오는
 
 
     @Controller
-
+    
     ```java
      @RequestMapping(value = "/login/oauth/google", method = RequestMethod.POST)
         public ResponseEntity<?> tokenVerify(String idToken){
@@ -524,7 +524,8 @@ DockerFile을 배포하였습니다. 그러면 NGINX가 80포트로 들어오는
         }
     ```
 
-    
+
+​    
 
   - Vue 코드
 
@@ -703,29 +704,41 @@ DockerFile을 배포하였습니다. 그러면 NGINX가 80포트로 들어오는
 
     
 
-  - 
+  - 아키텍처
+  
 
+​			![image-20220321230327584](https://i.ibb.co/7vTL93L/image-20220321230327584.png).
 
+​			(사진 : 서비스 흐름 도식화)
 
+​			1-1 일반 로그인은 DB값을 비교하여 로그인 정보가 일치하면 Refresh토큰을 DB에 저장하고 Access토큰과 Refresh토큰을 반환합니다.
 
+​			1-2 소셜 로그인을 하면 각각의 API가 토큰을 반환하고 그 토큰을 검증 후 구글과 카카오가 제공해준 사용자 정보를 Payload에 제공 받습니다.
 
-![image-20220321230327584](https://i.ibb.co/7vTL93L/image-20220321230327584.png).
+​			디코딩을 통해 데이터를 정제하고 인증이 완료되면 마찬가지로 Access토큰과 Refresh토큰을 반환합니다.
 
-(사진 : 서비스 흐름 도식화)
+​			2 로그인한 사용자가 서비스를 요청하면 인터셉터가 토큰을 검증한 뒤 유효한 값이면 통과시켜 데이터를 반환해 줄때 Access토큰 값을 갱신시켜
 
-소셜 로그인을 하면 각각의 API가 토큰을 반환하고 그 토큰을 검증 후 구글과 카카오가 제공해준 
+​			반환해줍니다.
+
+<hr/>
+
+## 함께한 사람
+
+| 조은누리 | 팀장, 프론트 담당 |      | https://github.com/eunnuricho     |
+| -------- | ----------------- | ---- | --------------------------------- |
+| 임경훈   | 프론트엔드 개발   |      | https://github.com/KyounghoonLim  |
+| 전호정   | 프론트엔드 개발   |      | https://github.com/hojeong33      |
+| 정순일   | 백엔드 개발       |      | https://github.com/JUNGSOONIL     |
+| 최명재   | 프론트엔드 개발   |      | https://github.com/HKLM93         |
+| 최상후   | 백엔드 개발       |      | https://github.com/Neungji-Baksal |
 
 
 
 <hr/>
 
+## 참고자료
 
-
-
-
-
-
-
-
-
+- 소셜 로그인 및 JWT : https://ayoteralab.tistory.com/
+- CI / CD 구축: SSAFY측 자료 열람
 
